@@ -2,27 +2,33 @@ img {
     width: 20%;
     height: 20%;
     margin: 2% ;
-    /* box-shadow: 3px 3px 10px rgba(140, 48, 143, 0.418); */
-    
-    /* margin-left: -15%;
-    margin-right: -15%; */
 }
 
-div.container {
-    /* display: grid;
-    width: 100%;
-    grid-auto-rows: 350px ;
-    grid-template-areas: 'a a';
-    grid-auto-flow: row;
-    margin: 5% auto 0 auto; */
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+.bold {
+    font-weight: bold;
+}
+
+div.opacity {
+    display: block;
+    opacity: 0.5;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+body {
+    font-family: 'Indie Flower', cursive;
+    
+    font-size: 18px;
     padding-left: 17%;
     padding-right: 17%;
     min-width: 700px;
+    color: rgb(226, 205, 134);
+}
 
-
+div.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 body {
@@ -30,8 +36,6 @@ body {
 }
 
 div.hidden {
-    
-    
     position: fixed;
     top: 0;
     left: 0;
@@ -40,8 +44,6 @@ div.hidden {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* text-align: center; */
-    /* background: rgba(1,1,1,0.7); */
 
     background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 1%, rgba(0,0,0,0.3) 100%); 
     background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.9) 1%,rgba(0,0,0,0.3) 100%); 
@@ -53,13 +55,10 @@ div.hidden {
 }
 
 div.hidden > img {
-    /* min-width: 600px;
-    min-height: 600px;
-    max-width: 700px;
-    max-height: 700px; */
     width: 570px;
     height: 570px;
-    /* margin: 15%; */
+    margin-right: 5%;
+   
     
 }
 
@@ -104,16 +103,57 @@ div.arrow.right{
     cursor: pointer;
 }
 
-
-
-div.container > img:hover {
-    opacity: 0;
-    transform: scale(1.1);
-    transition: transform .5s, opacity 5s;
-}
-
 div.arrow > a {
     text-decoration: none;
     color: rgb(28, 31, 39);
 }
 
+div.header {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 5%;
+}
+
+div.header> div > img {
+    width: 150px;
+    height: 100px;
+}
+div.header > .right {
+    padding-top: 1.5%;
+}
+
+div.info-section {
+    min-height: 60%;
+    min-width: 150px;
+    max-width: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+}
+
+div.description {
+    margin-bottom: 25px;
+
+}
+
+div.describe-here, div.comment-here {
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+div.right>div {
+    opacity: 0.8;
+}
+
+div.comment-here > p {
+    margin: 4%;
+}
+
+
+div.container > img:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+    /* background-color: black; */
+    transition: transform .5s, opacity 2s;
+}

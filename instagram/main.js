@@ -1,56 +1,72 @@
-var images = [{ url:'chaos-game/1.png'}, {url: 'chaos-game/2.png'}, {url: 'chaos-game/3.png'}, {url:'chaos-game/5.png'}, {url: 'chaos-game/6.png'}, {url: 'chaos-game/7.png'}, {url:'chaos-game/8.png'}, {url:'chaos-game/9.png'}, {url:'chaos-game/10.png'}, {url: 'chaos-game/11.png'}, {url: 'chaos-game/12.png'}, {url: 'chaos-game/13.png'}, {url: 'chaos-game/14.png'}, {url: 'chaos-game/15.png'}, {url: 'chaos-game/16.png'}, {url: 'chaos-game/17.png'}, {url: 'chaos-game/18.png'}, {url: 'chaos-game/19.png'}, {url: 'chaos-game/20.png'} ];
+var images = [{ url:'chaos-game/1.png',
+description: 'hello world!',
+comments: ['hi to you too', 'wazzap guys', 'me too! me too']},
+ {url: 'chaos-game/2.png',
+ description: 'my second post!',
+ comments: ["you're so awesome!", 'you too', "let's party y'all!!"]
+},
+  {url: 'chaos-game/3.png',
+description: 'people like birds, they poo all the time',
+comments: ['agreed', "you're so wise, bro", 'wow! who wrote that?!! so inspiring!']}, {url:'chaos-game/5.png'}, {url: 'chaos-game/6.png'}, {url: 'chaos-game/7.png'}, {url:'chaos-game/8.png'}, {url:'chaos-game/9.png'}, {url:'chaos-game/10.png'}, {url: 'chaos-game/11.png'}, {url: 'chaos-game/12.png'}, {url: 'chaos-game/13.png'}, {url: 'chaos-game/14.png'}, {url: 'chaos-game/15.png'}, {url: 'chaos-game/16.png'}, {url: 'chaos-game/17.png'}, {url: 'chaos-game/18.png'}, {url: 'chaos-game/19.png'}, {url: 'chaos-game/20.png'} ];
+
 
 var container = document.querySelector('.container');
 var hidden = document.querySelector('div.hidden');
 var hiddenImage = document.querySelector('div.hidden > img');
+var postDiv = document.querySelector('div.post');
 var currentIndex;
+var describeHere = document.querySelector('div.describe-here');
+var commentHere = document.querySelector('div.comment-here');
+var br = document.createElement('br');
+var arrowRight = document.querySelector("div.hidden>div.arrow.right");
+var arrowLeft = document.querySelector("div.hidden>div.arrow.left");
+var aTags = document.querySelectorAll('div.arrow a');
 
+// counting number of posts
+postDiv.textContent = `${images.length} posts`;
 
-images.forEach(function(image) {
+var createComments = function(image) {
+    commentHere.textContent = '';
+    for (var i = 0; i < image.comments.length; i++) {
+        var p = document.createElement('p');
+        p.textContent = image.comments[i];
+        commentHere.appendChild(p)
+    }
+}
 
-    var img = document.createElement('img');
-    img.setAttribute('src', image.url);
-    container.appendChild(img);
+//check if arrows should  be displayed
+var checkArrows = function() {
+    if (currentIndex >= images.length-1) {
+        arrowRight.style.opacity = 0;
+    } else { arrowRight.style.opacity = 1;}
 
-    img.addEventListener('click', function(event) {
-        hiddenImage.setAttribute('src', img.src);
-        hidden.style.display = 'flex';
-        currentIndex = images.indexOf(image);
-    })
-})
-
+    if (currentIndex === 0) {
+        arrowLeft.style.opacity = 0;
+    } else { arrowLeft.style.opacity = 1;}
+}
 
 var closeImage = function(x) {
-    console.log(x);
     if (x.target.localName !== 'img' && x.target.localName !== 'a' && x.target.className !== 'arrow left' && x.target.className !== 'arrow right') {
         hidden.style.display = 'none';
     }
 }
 
-hidden.addEventListener('click', closeImage);
-
-//get previous image
-
-var arrowLeft = document.querySelector("div.hidden>div.arrow.left");
-
 var previousImage = function() {
     currentIndex --;
 
     if (currentIndex < 0) {
-        var hidden = document.querySelector('div.hidden');
         hidden.style.display = 'none';
         return;
     }
+
+    checkArrows();
     
     var newAttr = images[currentIndex].url;
     hiddenImage.setAttribute('src', newAttr );
+    describeHere.textContent = images[currentIndex].description;
+    createComments(images[currentIndex]);
+
 }
-
-arrowLeft.addEventListener('click', previousImage);
-
-//get next image
-
-var arrowRight = document.querySelector("div.hidden>div.arrow.right");
 
 var nextImage = function() {
     currentIndex ++;
@@ -59,26 +75,46 @@ var nextImage = function() {
         hidden.style.display = 'none';
         return;
     }
-
-    //trying to stop displaying the arrow once it reaches the end
-
-    // if (indexOfImage >= images.length-1) {
-    //     arrowRight.style.display = 'none';
-    //     return;
-    // }
+    checkArrows();
     
     var newAttr = images[currentIndex].url;
     hiddenImage.setAttribute('src', newAttr );
+    describeHere.textContent = images[currentIndex].description;
+    createComments(images[currentIndex]);
 }
 
-arrowRight.addEventListener('click', nextImage);
 
-//block a tag from clicking
-var aTags = document.querySelectorAll('div.arrow a');
+//display all of the images on the page
+images.forEach(function(image) {
 
-// var prevent = function(e) {
-//     e.preventDefault();
-// }
+    var img = document.createElement('img');
+    img.setAttribute('src', image.url);
+    container.appendChild(img);
+
+
+    // display hidden div when you click on the image
+    img.addEventListener('click', function(event) {
+        hiddenImage.setAttribute('src', img.src);
+        hidden.style.display = 'flex';
+        currentIndex = images.indexOf(image);
+
+        console.log(event);
+
+        checkArrows();
+
+        describeHere.textContent = image.description;
+        // each comment on dif line
+        // image.comments.forEach(function(comment) {
+        //     console.log(comment);
+        //     comment += "</br>";
+        // }) ????????
+        createComments(image);
+    })
+
+    img.addEventListener('mouseout', function(x) {
+        img.style.background = 'black';
+    })
+})
 
 aTags.forEach( function(aTag) {
     
@@ -86,3 +122,18 @@ aTags.forEach( function(aTag) {
         e.preventDefault();
     })
 })
+
+
+hidden.addEventListener('click', closeImage);
+arrowLeft.addEventListener('click', previousImage);
+arrowRight.addEventListener('click', nextImage);
+
+
+
+
+
+
+
+
+
+// try to add number of comments when you hover over picture
