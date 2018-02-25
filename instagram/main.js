@@ -87,9 +87,11 @@ var nextImage = function() {
 //display all of the images on the page
 images.forEach(function(image) {
 
+    var divImg = document.createElement('div');
     var img = document.createElement('img');
     img.setAttribute('src', image.url);
-    container.appendChild(img);
+    divImg.appendChild(img)
+    container.appendChild(divImg);
 
 
     // display hidden div when you click on the image
@@ -111,9 +113,9 @@ images.forEach(function(image) {
         createComments(image);
     })
 
-    img.addEventListener('mouseout', function(x) {
-        img.style.background = 'black';
-    })
+    // img.addEventListener('mouseout', function(x) {
+    //     img.style.background = 'black';
+    // })
 })
 
 aTags.forEach( function(aTag) {
