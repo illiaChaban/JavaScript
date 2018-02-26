@@ -22,16 +22,20 @@ var arrowRight = document.querySelector("div.hidden>div.arrow.right");
 var arrowLeft = document.querySelector("div.hidden>div.arrow.left");
 var aTags = document.querySelectorAll('div.arrow a');
 
+
 // counting number of posts
 postDiv.textContent = `${images.length} posts`;
 
 var createComments = function(image) {
     commentHere.textContent = '';
-    for (var i = 0; i < image.comments.length; i++) {
-        var p = document.createElement('p');
-        p.textContent = image.comments[i];
-        commentHere.appendChild(p)
+    if (image.comments !== undefined) {
+        for (var i = 0; i < image.comments.length; i++) {
+            var p = document.createElement('p');
+            p.textContent = image.comments[i];
+            commentHere.appendChild(p)
+        }
     }
+    
 }
 
 var commentsNumber = function(image) {
@@ -122,6 +126,8 @@ images.forEach(function(image) {
 
     
 
+    
+
 
 
     // display hidden div when you click on the image
@@ -143,9 +149,18 @@ images.forEach(function(image) {
         createComments(image);
     })
 
-    // img.addEventListener('mouseout', function(x) {
-    //     img.style.background = 'black';
-    // })
+    var covers = document.querySelectorAll('div.cover');
+
+    img.addEventListener('mouseenter', function() {
+        currentIndex = images.indexOf(image);
+        covers[currentIndex].style.opacity = '0.8';
+        covers[currentIndex].style.transition = "opacity 1s";
+    })
+
+    img.addEventListener('mouseout', function() {
+        currentIndex = images.indexOf(image);
+        covers[currentIndex].style.opacity = '0';
+    })
 })
 
 aTags.forEach( function(aTag) {
@@ -161,7 +176,7 @@ icons.forEach( function(icon) {
     icon.addEventListener('click', function(e) {
         e.preventDefault();
     })
-    icont.addEventListener('mouseenter', function(e) {
+    icon.addEventListener('mouseenter', function(e) {
         e.preventDefault();
     })
 })

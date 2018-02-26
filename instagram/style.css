@@ -168,7 +168,7 @@ div.comment-here > p {
 div.container > div.image >img:hover {
     opacity: 0.3;
     transform: scale(1.1);
-    transition: transform .5s, opacity 2s;
+    transition: transform .5s, opacity 1s;
 }
 
 /* div.container > div.image > div.cover {
@@ -177,11 +177,11 @@ div.container > div.image >img:hover {
 
 } */
 
-div.container > div.image > div.cover > img.icon:hover {
+/* div.container > div.image > div.cover > img.icon:hover {
     opacity: 1;
     transition: opacity 2s;
   
-}
+} */
 
 .icon {
     position: relative;
@@ -201,7 +201,7 @@ div.container > div.cover {
     position: relative;
     left: -90px;
     top: 15px; 
-    /* opacity: 0; */
+    opacity: 0;
 }
 
 
