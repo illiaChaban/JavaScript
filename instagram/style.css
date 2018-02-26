@@ -199,8 +199,8 @@ div.container > div.cover {
     height: 0;
     width: 0;
     position: relative;
-    left: -90px;
-    top: 15px; 
+    left: -13%;
+    top: 22px; 
     opacity: 0;
 }
 
