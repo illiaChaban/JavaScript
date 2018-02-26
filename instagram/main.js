@@ -34,6 +34,14 @@ var createComments = function(image) {
     }
 }
 
+var commentsNumber = function(image) {
+    if (image.comments !== undefined) {
+        var count = image.comments.length;
+        return count; }
+    return '';
+    
+}
+
 //check if arrows should  be displayed
 var checkArrows = function() {
     if (currentIndex >= images.length-1) {
@@ -88,10 +96,32 @@ var nextImage = function() {
 images.forEach(function(image) {
 
     var divImg = document.createElement('div');
+    divImg.className = 'image';
+
     var img = document.createElement('img');
     img.setAttribute('src', image.url);
-    divImg.appendChild(img)
+
+    var divCover = document.createElement('div');
+    divCover.className = 'cover';
+    var commentIcon = document.createElement('img');
+    commentIcon.setAttribute('src', 'comment-icon.png');
+    commentIcon.className = 'icon';
+    divCover.appendChild(commentIcon);
+
+    var pCover = document.createElement('p');
+    pCover.className = "comments-number";
+    pCover.textContent = commentsNumber(image);
+    divCover.appendChild(pCover);
+
+
+
+    divImg.appendChild(img);
+
     container.appendChild(divImg);
+    container.appendChild(divCover);
+
+    
+
 
 
     // display hidden div when you click on the image
@@ -121,6 +151,17 @@ images.forEach(function(image) {
 aTags.forEach( function(aTag) {
     
     aTag.addEventListener('click', function(e) {
+        e.preventDefault();
+    })
+})
+
+var icons = document.querySelectorAll('img.icon');
+icons.forEach( function(icon) {
+    
+    icon.addEventListener('click', function(e) {
+        e.preventDefault();
+    })
+    icont.addEventListener('mouseenter', function(e) {
         e.preventDefault();
     })
 })
