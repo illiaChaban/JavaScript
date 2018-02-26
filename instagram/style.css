@@ -204,4 +204,8 @@ div.container > div.cover {
     opacity: 0;
 }
 
+div.image {
+    z-index: 1;
+}
+
 

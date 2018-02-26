@@ -179,6 +179,10 @@ icons.forEach( function(icon) {
     icon.addEventListener('mouseenter', function(e) {
         e.preventDefault();
     })
+
+    icon.addEventListener('mouseout', function(e) {
+        e.preventDefault();
+    })
 })
 
 
@@ -194,4 +198,3 @@ arrowRight.addEventListener('click', nextImage);
 
 
 
-// try to add number of comments when you hover over picture
