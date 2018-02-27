@@ -55,23 +55,23 @@
 
 
 
-function steamrollArray(arr) {
-    var newArr = [];
+// function steamrollArray(arr) {
+//     var newArr = [];
 
-    function steam(arr) {
-        for (var x of arr) {
-            if (typeof x === 'number') {
-                newArr.push(x);
-            } else {
-                steam(x);
-            }
-        }
-    }
-    steam(arr)
-    return newArr;
-}
+//     function steam(arr) {
+//         for (var x of arr) {
+//             if (typeof x === 'number') {
+//                 newArr.push(x);
+//             } else {
+//                 steam(x);
+//             }
+//         }
+//     }
+//     steam(arr)
+//     return newArr;
+// }
 
-console.log(steamrollArray([1, [2], [3, [[[4]], [5]] ] ] ));
+// console.log(steamrollArray([1, [2], [3, [[[4]], [5]] ] ] ));
 
 
 
@@ -95,15 +95,59 @@ console.log(steamrollArray([1, [2], [3, [[[4]], [5]] ] ] ));
 // findElement['Jim','Indian','Marsh','Glitch'],
 //  function(str){reutrn str.indexOf('itch) !== -1})
 
-var findElement = function(arr, fun) {
-    for (var x of arr) {
-        if (fun(x)) {
-            return x 
-        }
-    }
-    return false;
-}
+// var findElement = function(arr, fun) {
+//     for (var x of arr) {
+//         if (fun(x)) {
+//             return x 
+//         }
+//     }
+//     return false;
+// }
 
-console.log(findElement([1,3,5,8,9,10], function(num){return num % 2 === 0}));
-console.log(findElement([1,3,5,9], function(num){return num % 2 === 0}));
-console.log(findElement(['Jim','Indian','Marsh','Glitch'], function(str){return str.indexOf('itch') !== -1}));
+// console.log(findElement([1,3,5,8,9,10], function(num){return num % 2 === 0}));
+// console.log(findElement([1,3,5,9], function(num){return num % 2 === 0}));
+// console.log(findElement(['Jim','Indian','Marsh','Glitch'], function(str){return str.indexOf('itch') !== -1}));
+
+/////#########################
+
+var lst = [
+    {name: 'ben', skills: 9, height: 189},
+    {name: 'itzik', skills: 7, height: 100500},
+    {name: 'jonahtan', skills: 100500, height: 175}
+];
+
+
+var sortBy = function(prop) {
+        
+        return function(a,b) {
+            if (a[prop] > b[prop]) {
+                return 1;
+            } else
+            if (a[prop] < b[prop]) {
+                return -1;
+            } else { return 0; }
+        };
+
+};     
+
+// lst.sort(function(a,b) { return sortBy('height')});
+
+// lst.sort( function(a, b) {
+//     if (a['height'] > b['height']) {
+//         return 1;
+//     } else
+//     if (a['height'] < b['height']) {
+//         return -1;
+//     } else { return 0; }}
+// )
+
+// lst.sort ( function(a,b) {
+//     return a['skills'] - b['skills'];
+// })
+
+lst.sort(sortBy('name'));
+
+
+
+console.log(lst);
+
