@@ -10,29 +10,35 @@ description: 'people like birds, they poo all the time',
 comments: ['agreed', "you're so wise, bro", 'wow! who wrote that?!! so inspiring!']}, {url:'chaos-game/5.png'}, {url: 'chaos-game/6.png'}, {url: 'chaos-game/7.png'}, {url:'chaos-game/8.png'}, {url:'chaos-game/9.png'}, {url:'chaos-game/10.png'}, {url: 'chaos-game/11.png'}, {url: 'chaos-game/12.png'}, {url: 'chaos-game/13.png'}, {url: 'chaos-game/14.png'}, {url: 'chaos-game/15.png'}, {url: 'chaos-game/16.png'}, {url: 'chaos-game/17.png'}, {url: 'chaos-game/18.png'}, {url: 'chaos-game/19.png'}, {url: 'chaos-game/20.png'} ];
 
 
-var container = document.querySelector('.container');
-var hidden = document.querySelector('div.hidden');
-var hiddenImage = document.querySelector('div.hidden > img');
-var postDiv = document.querySelector('div.post');
+var $container = $('.container');
+var $hidden = $('div.hidden');
+var $hiddenImage = $('div.hidden > img');
+var $postDiv = $('div.post');
 var currentIndex;
-var describeHere = document.querySelector('div.describe-here');
-var commentHere = document.querySelector('div.comment-here');
-var br = document.createElement('br');
-var arrowRight = document.querySelector("div.hidden>div.arrow.right");
-var arrowLeft = document.querySelector("div.hidden>div.arrow.left");
-var aTags = document.querySelectorAll('div.arrow a');
+var $describeHere = $('div.describe-here');
+var $commentHere = $('div.comment-here');
+var $br = $('<br>');
+var $arrowRight = $("div.hidden>div.arrow.right");
+var $arrowLeft = $("div.hidden>div.arrow.left");
+
+var $aTags = $('div.arrow a');
+
+
+
+
+
 
 
 // counting number of posts
-postDiv.textContent = `${images.length} posts`;
+$postDiv.text(`${images.length} posts`);
 
 var createComments = function(image) {
-    commentHere.textContent = '';
+    $commentHere.text('');
     if (image.comments !== undefined) {
         for (var i = 0; i < image.comments.length; i++) {
-            var p = document.createElement('p');
-            p.textContent = image.comments[i];
-            commentHere.appendChild(p)
+            var p = $('<p>');
+            p.text(image.comments[i]);
+            $commentHere.append(p)
         }
     }
     
@@ -49,17 +55,18 @@ var commentsNumber = function(image) {
 //check if arrows should  be displayed
 var checkArrows = function() {
     if (currentIndex >= images.length-1) {
-        arrowRight.style.opacity = 0;
-    } else { arrowRight.style.opacity = 1;}
+        $arrowRight.css('opacity', 0);
+    } else { $arrowRight.css('opacity', 1);}
 
     if (currentIndex === 0) {
-        arrowLeft.style.opacity = 0;
-    } else { arrowLeft.style.opacity = 1;}
+        $arrowLeft.css('opacity', 0);
+    } else { $arrowLeft.css('opacity', 1);}
 }
 
 var closeImage = function(x) {
-    if (x.target.localName !== 'img' && x.target.localName !== 'a' && x.target.className !== 'arrow left' && x.target.className !== 'arrow right') {
-        hidden.style.display = 'none';
+    var target = $(x.target)
+    if (target.not('img') && target.not('a') && target.className !== 'arrow left' && x.target.className !== 'arrow right') {
+        $hidden.css('display', 'none');
     }
 }
 
@@ -67,15 +74,15 @@ var previousImage = function() {
     currentIndex --;
 
     if (currentIndex < 0) {
-        hidden.style.display = 'none';
+        $hidden.css('display', 'none');
         return;
     }
 
     checkArrows();
     
     var newAttr = images[currentIndex].url;
-    hiddenImage.setAttribute('src', newAttr );
-    describeHere.textContent = images[currentIndex].description;
+    $hiddenImage.attr('src', newAttr );
+    $describeHere.text(images[currentIndex].description);
     createComments(images[currentIndex]);
 
 }
@@ -84,14 +91,14 @@ var nextImage = function() {
     currentIndex ++;
 
     if (currentIndex >= images.length) {
-        hidden.style.display = 'none';
+        $hidden.css('display', 'none');
         return;
     }
     checkArrows();
     
     var newAttr = images[currentIndex].url;
-    hiddenImage.setAttribute('src', newAttr );
-    describeHere.textContent = images[currentIndex].description;
+    $hiddenImage.attr('src', newAttr );
+    $describeHere.text(images[currentIndex].description);
     createComments(images[currentIndex]);
 }
 
@@ -99,96 +106,105 @@ var nextImage = function() {
 //display all of the images on the page
 images.forEach(function(image) {
 
-    var divImg = document.createElement('div');
-    divImg.className = 'image';
-
-    var img = document.createElement('img');
-    img.setAttribute('src', image.url);
-
-    var divCover = document.createElement('div');
-    divCover.className = 'cover';
-    var commentIcon = document.createElement('img');
-    commentIcon.setAttribute('src', 'comment-icon.png');
-    commentIcon.className = 'icon';
-    divCover.appendChild(commentIcon);
-
-    var pCover = document.createElement('p');
-    pCover.className = "comments-number";
-    pCover.textContent = commentsNumber(image);
-    divCover.appendChild(pCover);
-
-
-
-    divImg.appendChild(img);
-
-    container.appendChild(divImg);
-    container.appendChild(divCover);
-
+    var $divImg = $('<div>');
+    $divImg.addClass('image');
     
 
-    
+    var img = $('<img>');
+    img.attr('src', image.url);
+   
 
+    var $divCover = $('<div>');
+    $divCover.addClass('cover');
+    var $commentIcon = $('<img>');
+    $commentIcon.attr('src', 'comment-icon.png');
+    $commentIcon.addClass('icon');
+    $divCover.append($commentIcon);
+
+    var $pCover = $('<p>');
+    $pCover.addClass("comments-number");
+    $pCover.text(commentsNumber(image));
+    $divCover.append($pCover);
+
+
+
+    $divImg.append(img);
+
+    
+    $container.append($divImg);
+    $container.append($divCover);
 
 
     // display hidden div when you click on the image
-    img.addEventListener('click', function(event) {
-        hiddenImage.setAttribute('src', img.src);
-        hidden.style.display = 'flex';
+
+    $divImg.on('click', 'img', function(event) {
+        $hiddenImage.attr('src', img.src);
+        $hidden.css('display', 'flex');
         currentIndex = images.indexOf(image);
 
         console.log(event);
 
         checkArrows();
 
-        describeHere.textContent = image.description;
-        // each comment on dif line
-        // image.comments.forEach(function(comment) {
-        //     console.log(comment);
-        //     comment += "</br>";
-        // }) ????????
+        $describeHere.textContent = image.description;
         createComments(image);
     })
+    // img.addEventListener('click', function(event) {
+    //     $hiddenImage.setAttribute('src', img.src);
+    //     $hidden.style.display = 'flex';
+    //     currentIndex = images.indexOf(image);
 
-    var covers = document.querySelectorAll('div.cover');
+    //     console.log(event);
 
-    img.addEventListener('mouseenter', function() {
-        currentIndex = images.indexOf(image);
-        covers[currentIndex].style.opacity = '0.8';
-        covers[currentIndex].style.transition = "opacity 1s";
-    })
+    //     checkArrows();
 
-    img.addEventListener('mouseout', function() {
-        currentIndex = images.indexOf(image);
-        covers[currentIndex].style.opacity = '0';
-    })
-})
+    //     $describeHere.textContent = image.description;
+    //     createComments(image);
+    // })
 
-aTags.forEach( function(aTag) {
+    var $covers = $('div.cover');
     
-    aTag.addEventListener('click', function(e) {
-        e.preventDefault();
-    })
-})
-
-var icons = document.querySelectorAll('img.icon');
-icons.forEach( function(icon) {
+    // $covers = Array.from($covers)
     
-    icon.addEventListener('click', function(e) {
-        e.preventDefault();
-    })
-    icon.addEventListener('mouseenter', function(e) {
-        e.preventDefault();
+
+
+    $divImg.on('mouseenter', 'img', function() {
+        currentIndex = images.indexOf(image);
+        $covers.eq(currentIndex).css('opacity', '0.8');
+        $covers.eq(currentIndex).css('transition', "opacity 1s");
     })
 
-    icon.addEventListener('mouseout', function(e) {
-        e.preventDefault();
+    $divImg.on('mouseout', 'img', function() {
+        currentIndex = images.indexOf(image);
+        $covers.eq(currentIndex).css('opacity', '0');
     })
 })
 
+$aTags.on( 'click', 'a', function(e) {
+        e.preventDefault();
+    })
 
-hidden.addEventListener('click', closeImage);
-arrowLeft.addEventListener('click', previousImage);
-arrowRight.addEventListener('click', nextImage);
+
+var $icons = $('img.icon');
+
+// $icons.each( function(i, icon) {
+    
+//     icon.on('click', function(e) {
+//         e.preventDefault();
+//     })
+//     icon.on('mouseenter', function(e) {
+//         e.preventDefault();
+//     })
+
+//     icon.on('mouseout', function(e) {
+//         e.preventDefault();
+//     })
+// })
+
+
+$hidden.on('click', closeImage);
+$arrowLeft.on('click', previousImage);
+$arrowRight.on('click', nextImage);
 
 
 
