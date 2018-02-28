@@ -65,7 +65,8 @@ var checkArrows = function() {
 
 var closeImage = function(x) {
     var target = $(x.target)
-    if (target.not('img') && target.not('a') && target.className !== 'arrow left' && x.target.className !== 'arrow right') {
+ 
+    if (target.is($hidden) || target.is($('div.exit'))) {
         $hidden.css('display', 'none');
     }
 }
@@ -80,6 +81,7 @@ var previousImage = function() {
 
     checkArrows();
     
+    $describeHere.text('');
     var newAttr = images[currentIndex].url;
     $hiddenImage.attr('src', newAttr );
     $describeHere.text(images[currentIndex].description);
@@ -95,7 +97,7 @@ var nextImage = function() {
         return;
     }
     checkArrows();
-    
+    $describeHere.text('');
     var newAttr = images[currentIndex].url;
     $hiddenImage.attr('src', newAttr );
     $describeHere.text(images[currentIndex].description);
@@ -146,7 +148,12 @@ images.forEach(function(image) {
 
         checkArrows();
 
-        $describeHere.textContent = image.description;
+        if (image.description === undefined) {
+            $describeHere.text('')
+        } else {
+            $describeHere.text( image.description);
+        }
+        
         createComments(image);
     })
     // img.addEventListener('click', function(event) {
