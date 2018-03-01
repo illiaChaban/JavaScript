@@ -1,13 +1,17 @@
 var storageOrders = JSON.parse(localStorage.getItem('orders')) ;
-var orders = storageOrders !== null ? storageOrders : [] ; 
+
+var url = 'https://dc-coffeerun.herokuapp.com/api/coffeeorders';
+
+var orders = {};
+var count = 0;
 
 var footer = document.querySelector('footer');
 
 var form = document.querySelector('form');
 
 
-var displayOrder = function(order, i) {
-
+var displayOrder = function(order) {
+    count ++;
     //display orders on the page;
     var div = document.createElement('div');
     div.className = 'order';
@@ -15,54 +19,84 @@ var displayOrder = function(order, i) {
 
     //count order
     var pCount = document.createElement('p');
-    pCount.textContent = `Order #${i+1}`;
+    pCount.textContent = `Order #${count}`;
     pCount.style.fontWeight = 'bold';
     div.appendChild(pCount);
 
     for (var key of keys) {
-        var p = document.createElement('p');
-        p.textContent = `${key}: ${order[key]}`
-        div.appendChild(p);
+        if ( key !== '_id' && key !== '__v') {
+            var p = document.createElement('p');
+            p.textContent = `${key}: ${order[key]}`
+
+            if (key === 'emailAddress') {
+                p.className = 'email';
+            }
+            div.appendChild(p);
+        }
+        
     }
 
     div.addEventListener('click', function(e) {
-        if (div.style.backgroundImage === '') {
-            
-            div.style.backgroundImage = "url('completed1.png')"; // contain no-repeat 
-            div.style.backgroundColor = "rgba(212, 216, 211, 0.603)";
-        } else {
-            orders.splice(i, 1);
-            localStorage.setItem('orders', JSON.stringify(orders));
+        div.style.backgroundImage = "url('completed1.png')"; // contain no-repeat 
+        div.style.backgroundColor = "rgba(212, 216, 211, 0.603)";
+        setTimeout(function() {
+            var textEmail = div.querySelector('.email').textContent.slice(14);
+            $.ajax({method: 'DELETE', url: url + `/${textEmail}`});
             div.remove();
-        }
+        }, 1200)
     })
-    // div.style.backgroundImage = "url('completed1.png')";
     footer.appendChild(div);
 }
-
-
-
 
 // add order to an order list when you 'submit'
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-    orders.push({coffee: form.coffee.value,
-    email: form.emailAddress.value,
-    size: form.size.value,
-    flavor: form.flavor.value,
-    range: form.strength.value
+
+    orders[form.emailAddress.value] = {coffee: form.coffee.value,
+        emailAddress: form.emailAddress.value,
+        size: form.size.value,
+        flavor: form.flavor.value,
+        strength: form.strength.value
+        };
+
+    displayOrder(orders[form.emailAddress.value]);
+    console.log(orders[form.emailAddress.value])
+    $.post(url, orders[form.emailAddress.value], function(data) {
+        console.log('posted');
+        console.log(data);
     });
-
-    displayOrder(orders[orders.length - 1], orders.length - 1);
-
-    localStorage.setItem('orders', JSON.stringify(orders));
 })
 
 form.addEventListener('reset', function(e) {
     orders = [];
-    localStorage.setItem('orders', JSON.stringify(orders));
     var divOrders = document.querySelectorAll('div.order');
     divOrders.forEach( function(x) {x.remove()})
+    $.ajax({method: "DELETE", url: url})
 })
 
-orders.forEach( displayOrder);
+$.get(url, function(data) { 
+    orders = data;
+    for (var key in orders) {
+        displayOrder(orders[key]);
+    }
+});
+
+var repopButton = document.querySelector('button.btn.btn-default.right')
+repopButton.addEventListener('click', function(e) {
+
+    for ( var i = 1; i < 6; i++ ) {
+        var email = "EMAIL" + i +"@testme.com";
+
+        orders[email] = {
+            coffee: "TEST" + i,
+            emailAddress: email,
+            size: "TEST",
+            flavor: "TEST",
+            strength: 100
+        };
+
+        displayOrder(orders[email]);
+        $.post(url, orders[email]);
+    }
+  
+})

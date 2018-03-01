@@ -15,3 +15,7 @@ div.order {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+.right {
+    margin-left: 60%;
+}
