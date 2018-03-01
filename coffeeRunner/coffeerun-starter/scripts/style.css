@@ -1,0 +1,17 @@
+footer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.order>p {
+    margin: -5px;
+    padding: 0px;
+}
+
+div.order {
+    margin: 13px;
+    /* margin-left: 10px; */
+    padding: 5px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
