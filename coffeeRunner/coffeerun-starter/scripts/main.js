@@ -1,70 +1,26 @@
-var storageOrders = JSON.parse(localStorage.getItem('orders')) ;
-
 var url = 'https://dc-coffeerun.herokuapp.com/api/coffeeorders';
-
 var orders = {};
 var count = 0;
 
 var footer = document.querySelector('footer');
-
 var form = document.querySelector('form');
+var repopulateButton = document.querySelector('button.btn.btn-default.right');
 
 
-var displayOrder = function(order) {
-    count ++;
-    //display orders on the page;
-    var div = document.createElement('div');
-    div.className = 'order';
-    var keys = Object.keys(order);
 
-    //count order
-    var pCount = document.createElement('p');
-    pCount.textContent = `Order #${count}`;
-    pCount.style.fontWeight = 'bold';
-    div.appendChild(pCount);
-
-    for (var key of keys) {
-        if ( key !== '_id' && key !== '__v') {
-            var p = document.createElement('p');
-            p.textContent = `${key}: ${order[key]}`
-
-            if (key === 'emailAddress') {
-                p.className = 'email';
-            }
-            div.appendChild(p);
-        }
-        
+$.get(url, function(data) { 
+    orders = data;
+    for (var key in orders) {
+        displayOrder(orders[key]);
     }
+});
 
-    div.addEventListener('click', function(e) {
-        div.style.backgroundImage = "url('completed1.png')"; // contain no-repeat 
-        div.style.backgroundColor = "rgba(212, 216, 211, 0.603)";
-        setTimeout(function() {
-            var textEmail = div.querySelector('.email').textContent.slice(14);
-            $.ajax({method: 'DELETE', url: url + `/${textEmail}`});
-            div.remove();
-        }, 1200)
-    })
-    footer.appendChild(div);
-}
 
-// add order to an order list when you 'submit'
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-
-    orders[form.emailAddress.value] = {coffee: form.coffee.value,
-        emailAddress: form.emailAddress.value,
-        size: form.size.value,
-        flavor: form.flavor.value,
-        strength: form.strength.value
-        };
-
-    displayOrder(orders[form.emailAddress.value]);
-    console.log(orders[form.emailAddress.value])
-    $.post(url, orders[form.emailAddress.value], function(data) {
-        console.log('posted');
-        console.log(data);
-    });
+    var newOrder = createNewOrder(orders);
+    displayOrder(newOrder);
+    $.post(url, newOrder);
 })
 
 form.addEventListener('reset', function(e) {
@@ -74,29 +30,105 @@ form.addEventListener('reset', function(e) {
     $.ajax({method: "DELETE", url: url})
 })
 
-$.get(url, function(data) { 
-    orders = data;
-    for (var key in orders) {
-        displayOrder(orders[key]);
-    }
-});
-
-var repopButton = document.querySelector('button.btn.btn-default.right')
-repopButton.addEventListener('click', function(e) {
+repopulateButton.addEventListener('click', function(e) {
 
     for ( var i = 1; i < 6; i++ ) {
-        var email = "EMAIL" + i +"@testme.com";
-
-        orders[email] = {
-            coffee: "TEST" + i,
-            emailAddress: email,
-            size: "TEST",
-            flavor: "TEST",
-            strength: 100
-        };
+        var email = createTestOrder(i);
 
         displayOrder(orders[email]);
         $.post(url, orders[email]);
     }
   
 })
+
+/////////###############################################################
+
+var createTestOrder = function(index) {
+    var email = "EMAIL" + index +"@testme.com";
+
+        orders[email] = {
+            coffee: "TEST" + index,
+            emailAddress: email,
+            size: "TEST",
+            flavor: "TEST",
+            strength: 100
+        };
+    return email;    
+}
+
+
+var createDivOrder = function() {
+    var div = document.createElement('div');
+    div.className = 'order';
+    return div;
+}
+
+var createParagraph = function(key, order) {
+    var p = document.createElement('p');
+    p.textContent = `${key}: ${order[key]}`;
+
+    if (key === 'emailAddress') {
+        p.className = 'email';
+    }
+    return p;
+}
+
+var displayCountOrder = function() {
+    count++
+    var pCount = document.createElement('p');
+    pCount.textContent = `Order #${count}`;
+    pCount.style.fontWeight = 'bold';
+    return pCount;
+}
+
+var displayOrder = function(order) {
+    var div = createDivOrder();
+    //count order
+    var pCount = displayCountOrder();
+    div.appendChild(pCount);
+ 
+    var keys = Object.keys(order);
+
+    for (var key of keys) {
+        if ( key !== '_id' && key !== '__v') {
+            var p = createParagraph(key, order);
+            div.appendChild(p);
+        }
+    }
+    footer.appendChild(div);
+
+    div.addEventListener('click', function(e) {
+        changeBackground(div);
+        setTimeout(function() { deleteOrder(div) } , 1200)
+    })
+}
+
+
+var changeBackground = function(element) {
+    element.style.backgroundImage = "url('completed1.png')"; 
+    element.style.backgroundColor = "rgba(212, 216, 211, 0.603)";
+}
+var deleteOrder = function(div) {
+    var textEmail = div.querySelector('.email').textContent.slice(14);
+    $.ajax({method: 'DELETE', url: url + `/${textEmail}`});
+    div.remove();
+}
+
+
+
+var createNewOrder = function(orders) {
+
+    orders[form.emailAddress.value] = {coffee: form.coffee.value,
+        emailAddress: form.emailAddress.value,
+        size: form.size.value,
+        flavor: form.flavor.value,
+        strength: form.strength.value
+        };
+
+    return orders[form.emailAddress.value];
+}
+
+
+
+
+
