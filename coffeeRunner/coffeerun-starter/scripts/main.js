@@ -8,38 +8,18 @@ var repopulateButton = document.querySelector('button.btn.btn-default.right');
 
 
 
-// $.get(url, function(data) { 
-//     orders = data;
-//     for (var key in orders) {
-//         displayOrder(orders[key]);
-//     }
-// });
-
-// var getOrders = function() {
-//     var promise = new Promise(function(resolve) {
-//         $.get(url, resolve);
-//     })
-//     return promise;
-// }
-
-var getOrders = new Promise( function(resolve) {
-    $.get(url, resolve);
-})
-
-var gotPromise = getOrders
-gotPromise.then(function(data) {
-    orders = data;
-    for (var key in orders) {
-        displayOrder(orders[key]);
-    }
-});
-
-// $.get(url, function(data) { 
-//     orders = data;
-//     for (var key in orders) {
-//         displayOrder(orders[key]);
-//     }
-// });
+orders = fetch(url)
+    .then( function(response) {
+        return response.json();
+    })
+    .then( function(data) {
+        return Object.values(data)
+    })
+    .then( function(orders) {
+        for ( var order of orders) {
+            displayOrder(order)
+        }
+    })
 
 
 
