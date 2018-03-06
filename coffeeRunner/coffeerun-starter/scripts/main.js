@@ -27,14 +27,14 @@ form.addEventListener('submit', function(e) {
     e.preventDefault();
     var newOrder = createNewOrder(orders);
     displayOrder(newOrder);
-    $.post(url, newOrder);
+    postOrder(url, newOrder);
 })
 
 form.addEventListener('reset', function(e) {
     orders = [];
     var divOrders = document.querySelectorAll('div.order');
     divOrders.forEach( function(x) {x.remove()})
-    $.ajax({method: "DELETE", url: url})
+    fetch(url, {method: "DELETE"})
 })
 
 repopulateButton.addEventListener('click', function(e) {
@@ -43,12 +43,22 @@ repopulateButton.addEventListener('click', function(e) {
         var email = createTestOrder(i);
 
         displayOrder(orders[email]);
-        $.post(url, orders[email]);
+        postOrder(url, orders[email]);
     }
   
 })
 
 /////////###############################################################
+var postOrder = function(url, order) {
+    return fetch(url, {
+        body: JSON.stringify(order),
+        headers: {
+            'content-type': 'application/json'
+        },
+        method: 'POST'
+    })
+}
+
 
 var createTestOrder = function(index) {
     var email = "EMAIL" + index +"@testme.com";
@@ -117,7 +127,7 @@ var changeBackground = function(element) {
 }
 var deleteOrder = function(div) {
     var textEmail = div.querySelector('.email').textContent.slice(14);
-    $.ajax({method: 'DELETE', url: url + `/${textEmail}`});
+    fetch(url + `/${textEmail}`, {method: 'DELETE'})
     div.remove();
 }
 
